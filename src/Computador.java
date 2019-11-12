@@ -30,7 +30,7 @@ public class Computador
     
     public void clockSubInstrucao() 
     {
-        while(!cpu.isNovaSubInstrucao()) 
+        while(!cpu.isNovaSubInstrucao() && !cpu.getUC().isGoto()) 
         {
             cpu.clockSub();
             this.checaProcessoBarramento();

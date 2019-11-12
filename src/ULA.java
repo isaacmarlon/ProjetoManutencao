@@ -7,14 +7,22 @@ public class ULA {
     public final int MAIOR = 4;
     public final int MENOR = 5;
     public final int IGUAL = 6;
+    public final int GOTO = 7;
+    public final int LER = 8;
+    public final int ESC = 9;
 
     private int operacao;
-    private double registrador;
+    private int registrador;
     private int acumulador;
+    
+    private boolean isGoto;
+    private boolean isEscrever;
     
     public ULA()
     {
-        this.operacao = 0;
+        operacao = 0;
+        isGoto = false;
+        isEscrever = false;
     }
 
     public void setOp(int operacao){ this.operacao = operacao;}
@@ -44,6 +52,17 @@ public class ULA {
             case IGUAL:
                 acumulador = acumulador == registrador ? 1:0;
                 break;
+            /*
+            case GOTO:
+                isGoto = true;
+                break;
+            */
+            case LER:
+                acumulador = registrador;
+                break;
+            case ESC:
+                isEscrever = true;
+                break;
         }
     }
 
@@ -58,8 +77,33 @@ public class ULA {
     public int getMULT() { return MULT; }
     public int getMENOR() { return MENOR; }
     public int getSUB() { return SUB; }
+    public int getGOTO() { return GOTO; }
+
+    public int getESC() {
+        return ESC;
+    }
+
+    public int getLER() {
+        return LER;
+    }
     
     
+
+    public int getRegistrador() {
+        return registrador;
+    }
+
+    public boolean isGoto() {
+        return isGoto;
+    }
+    public boolean isEscrever()
+    {
+        return isEscrever;
+    }
+    public void setEscrever(boolean valor)
+    {
+        isEscrever = valor;
+    }
     
     
 }

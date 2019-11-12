@@ -16,6 +16,8 @@ public class ContactEditorUI extends javax.swing.JFrame {
         
         initComponents();
         
+        
+        
         for(int i =0; i< 50; i++){
             jTable1.setValueAt(i, i, 0);
             jTable1.setValueAt(pc.getMemoria().getDados(i), i, 1);
@@ -326,26 +328,41 @@ public class ContactEditorUI extends javax.swing.JFrame {
         pc.clockInstrucao();
         
         // aponta para outra instrucao
-        nInstrucao++;
+        
+        if (pc.getCpu().getUC().isGoto()) {
+            nInstrucao = pc.getCpu().getDadosCpu().getPc();
+            pc.getCpu().getUC().setGoto(false);
+        }
+        else {
+            nInstrucao++;
+        }
+        
         jTable1.setRowSelectionInterval(nInstrucao, nInstrucao);
         pc.setNovaInstrucao(false); // utilizado para reiniciar processos 
         
+        atualizarMemoria();
         listarDadosCpu(); 
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         
-        jTable1.setRowSelectionInterval(nInstrucao, nInstrucao);
-            
-        pc.clockSubInstrucao();
         
-        if(pc.cpuNovaInstrucao()){
-            pc.setNovaInstrucao(false); // utilizado para reiniciar processos 
-            nInstrucao++;
             jTable1.setRowSelectionInterval(nInstrucao, nInstrucao);
-        }
+
+            pc.clockSubInstrucao();
+
+            if (pc.getCpu().getUC().isGoto()) {
+                nInstrucao = pc.getCpu().getDadosCpu().getPc();
+                pc.getCpu().getUC().setGoto(false);
+            }
+            else {
+                nInstrucao++;
+            }    
+            jTable1.setRowSelectionInterval(nInstrucao, nInstrucao);
+
+            atualizarMemoria();
+            listarDadosCpu(); 
         
-        listarDadosCpu();  
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -353,11 +370,18 @@ public class ContactEditorUI extends javax.swing.JFrame {
         pc.clockMicroInstrucao();
         
         if(pc.cpuNovaInstrucao()){
-            nInstrucao++;
+            if (pc.getCpu().getUC().isGoto()) {
+                nInstrucao = pc.getCpu().getDadosCpu().getPc();
+                pc.getCpu().getUC().setGoto(false);
+            }
+            else {
+                nInstrucao++;
+            }
             jTable1.setRowSelectionInterval(nInstrucao, nInstrucao);
         }
         
-        listarDadosCpu();   
+        atualizarMemoria();
+        listarDadosCpu();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jTable1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable1KeyPressed
@@ -377,9 +401,8 @@ public class ContactEditorUI extends javax.swing.JFrame {
     
     private void atualizarMemoria(){
         // TODO add your handling code here:
-        System.out.println("passei aqui");
         for(int i=0; i<50; i++){
-            memoria.setDados(i, ""+jTable1.getValueAt(i, 1));
+            jTable1.setValueAt(pc.getMemoria().getDados(i), i, 1);
         }        
     }
     public void listarDadosCpu(){
@@ -447,6 +470,5 @@ public class ContactEditorUI extends javax.swing.JFrame {
     private javax.swing.JTextField pcValor;
     // End of variables declaration//GEN-END:variables
     static private Computador pc;
-    static private Memoria memoria;
     private int nInstrucao;
 }

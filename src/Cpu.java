@@ -42,6 +42,7 @@ public class Cpu implements InterfaceForm {
     
     @Override
     public void clockMicro() {
+        System.out.println(indexMicroInstrucao + " <<<<<<<<<<<<<<<<<<<<");
         switch (indexMicroInstrucao)
         {
             case 0:       
@@ -75,7 +76,14 @@ public class Cpu implements InterfaceForm {
                 break;
             case 7:
                 uc.buscarDados0();
-                indexMicroInstrucao++;
+                if (uc.isGoto())
+                {
+                    indexMicroInstrucao = 0;
+                    indexSubInstrucao = 0;
+                }
+                else {
+                    indexMicroInstrucao++;    
+                }
                 break;
             case 8:
                 uc.buscarDados1();
@@ -107,9 +115,11 @@ public class Cpu implements InterfaceForm {
                 
                 if (uc.acabouSub())
                 {   
-                    System.out.println("Agora é uma nova subInstrucao!");
-                    isNovaSubInstrucao = true;
-                    indexSubInstrucao++;
+                    if (!uc.isGoto()) {
+                        System.out.println("Agora é uma nova subInstrucao!");
+                        isNovaSubInstrucao = true;
+                        indexSubInstrucao++;
+                    }
                     uc.setAcabouSub(false); // resetando
                 }
                 else
@@ -180,6 +190,7 @@ public class Cpu implements InterfaceForm {
     public void setBarramento(Barramento barramento) { this.barramento = barramento; }
 
     public DadosCpu getDadosCpu() { return dadosCpu; }
+    public UC getUC() { return uc; }
     
     public boolean isNovaInstrucao() { return dadosCpu.isNovaInstrucao(); }
     public void setNovaInstrucao(boolean valor){ dadosCpu.setNovaInstrucao(valor); }

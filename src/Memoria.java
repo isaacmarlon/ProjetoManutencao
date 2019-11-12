@@ -16,18 +16,19 @@ public class Memoria {
         for(int i=0; i<100; i++){
             dados[i]="0";
         }
-        dados[0] = "soma 10";
-        dados[1] = "sub 11";
-        dados[2] = "div 12";
-        dados[3] = "mult 13";
-        dados[4] = "maior 10";
-        dados[5] = "menor 11";
-        dados[6] = "igual 12";
+        dados[0] = "ler 10";
+        dados[1] = "soma 11";
         
-        dados[10] = "5";
-        dados[11] = "10";
-        dados[12] = "2";
-        dados[13] = "7";
+        dados[2] = "esc 12";
+        dados[3] = "sub 13";
+        dados[4] = "esc 12";
+        dados[5] = "ler 12";
+        dados[6] = "goto 3";
+        
+        dados[10] = "4";
+        dados[11] = "4";
+        dados[12] = "0";
+        dados[13] = "1";
         
     }
 

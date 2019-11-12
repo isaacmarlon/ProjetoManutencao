@@ -22,6 +22,7 @@ public class UC {
     private int indexSubMicro;
     
     private boolean acabouSub;
+    private boolean isGoto;
     
     private boolean temOperando;
     private boolean isInstrucao;
@@ -42,6 +43,8 @@ public class UC {
         isInstrucao = false;
         operandoInstrucao = "";
         valorInstrucao = "";
+        
+        isGoto = false;
     }
    
     public void nextSubMicro()
@@ -102,6 +105,11 @@ public class UC {
             case 0:
                 System.out.println("-> BUSCAR DADOS 0");
                 buscarDados0();
+                
+                if (isGoto)
+                {
+                    this.finalizaSub();
+                }
                 break;
             case 1:
                 System.out.println("-> BUSCAR DADOS 1");
@@ -238,6 +246,15 @@ public class UC {
                 case "igual":
                     ula.setOp(ula.getIGUAL());
                     break;
+                case "ler":
+                    ula.setOp(ula.getLER());
+                    break;
+                case "esc":
+                    ula.setOp(ula.getESC());
+                    break;
+                case "goto":
+                    isGoto = true;
+                    break;
             }
             
             System.out.println("ULA recebeu OP = " + ula.getOperacao() + " (" + this.operandoInstrucao  + ")"); 
@@ -246,9 +263,19 @@ public class UC {
     }
     
     public void buscarDados0(){
-        System.out.println("-   -   -   -   buscarDados0  -   -   -   -");
-        System.out.println("Vou buscar o dado no endereço MAR " + dadosCpu.getMar());
-        barramento.receberDado(dadosCpu.getMar());
+        if (isGoto)
+        {
+            System.out.println("GOTO resetando");
+            dadosCpu.setNovaInstrucao(true);
+            indexMicroInstrucao = 0;
+            indexSubMicro = 0;
+            dadosCpu.setPc(dadosCpu.getMar());
+        }
+        else {
+            System.out.println("-   -   -   -   buscarDados0  -   -   -   -");
+            System.out.println("Vou buscar o dado no endereço MAR " + dadosCpu.getMar());
+            barramento.receberDado(dadosCpu.getMar());
+        }
         System.out.println("-   -   -   -       //        -   -   -   -");
     }
     
@@ -275,9 +302,27 @@ public class UC {
     
     public void processarDados2() {
         System.out.println("-   -   -   -   processarDados2  -   -   -   -");
-        System.out.println("Depois do clock o ACC (ula) = " + ula.getAcc() + " e ACC (dadosCpu) recebe.");
-        dadosCpu.setAcc(ula.getAcc());
+       
+        if (ula.isEscrever())
+        {
+            barramento.enviarDado(dadosCpu.getMar(), String.valueOf(ula.getAcc()));
+            ula.setEscrever(false);
+        }
+        else
+        {
+            System.out.println("Depois do clock o ACC (ula) = " + ula.getAcc() + " e ACC (dadosCpu) recebe.");
+            dadosCpu.setAcc(ula.getAcc());
+        }
         System.out.println("-   -   -   -       //        -   -   -   -");
     }
 
+    public boolean isGoto() {
+        return isGoto;
+    }
+    
+    public void setGoto(boolean valor)
+    {
+        isGoto = valor;
+    }
+       
 }
